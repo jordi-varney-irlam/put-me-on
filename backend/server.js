@@ -26,6 +26,11 @@ mongoose.connect(process.env.MONGO_URI, {
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
+//URL for recommendations
+const recRoutes = require('./routes/recommendations');
+app.use('/api/recs', recRoutes);
+
+//hello test
 app.get('/', (req, res) => {
   res.send('Hello from backend!');
 });

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Recommendation = require('../models/Rec');
 
-// POST /api/res/ - create a new recommendation
+//POST /api/recs/ - create a new recommendation
 router.post('/', async (req, res) => {
     try {
         const { category, title, description, userId } = req.body;
@@ -25,3 +25,16 @@ router.post('/', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+//GET /api/recs/ - get all recommendations
+router.get('/', async (req, res) => {
+    try {
+        const recs = await Recommendation.find().sort({createdAt: -1}) //newest first
+        res.json(recs);
+    } catch (err) {
+        res.status(500).json({error: err.message});
+    }
+});
+
+
+module.exports = router;
