@@ -20,6 +20,7 @@ const createRecommendation = async (req, res) => {
         await newRec.save();
         res.status(201).json({ message: 'Recommendation saved!' });
     } catch (err) {
+        console.error('Error creating recommendation:', err)
         res.status(500).json({ error: err.message });
     }
 };

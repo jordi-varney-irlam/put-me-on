@@ -67,7 +67,7 @@ const CreateRecommendation = () => {
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
           />
-          <Button colorScheme="blue" type="submit" width="100%">
+          <Button colorScheme="purple" type="submit" width="100%">
             Submit
           </Button>
         </VStack>

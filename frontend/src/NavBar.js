@@ -11,6 +11,7 @@ const NavBar = () => {
         justifyContent="center" // center the animated text
         bg="gray.500"
         overflow="hidden"
+        borderRadius="xl"
       >
         <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
           <TextPressure
