@@ -5,6 +5,7 @@ import NavBar from './NavBar';
 import TrueBar from './TrueBar';
 import HomePage from './pages/HomePage'
 import CreateUserPage from './pages/CreateUserPage'
+import LoginPage from './pages/LoginPage'
 
 
 
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/createuser" element={<CreateUserPage />} />
+          <Route path="/login" element={<LoginPage />} />
         </Routes>
 
         {/*LOW NAVBAR (also over all pages?)*/}

@@ -40,7 +40,7 @@ const HomePage = () => {
               </span>
             </h2>
             <p>{rec.description}</p>
-            <p>{rec.userId}</p>
+            <p>Posted by: {rec.userId?.username || 'Unknown' }</p>
           </div>
         ))
       )}

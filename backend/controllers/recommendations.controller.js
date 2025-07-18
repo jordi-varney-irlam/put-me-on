@@ -3,10 +3,11 @@ const Recommendation = require('../models/Rec');
 //create recommendations
 const createRecommendation = async (req, res) => {
     try {
-        const { category, title, description, userId } = req.body;
+        const { category, title, description } = req.body;
+        const userId = req.user._id;
 
         //validation
-        if (!category || !title || !description || !userId) {
+        if (!category || !title || !description ) {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
@@ -14,7 +15,7 @@ const createRecommendation = async (req, res) => {
             category,
             title,
             description,
-            userId
+            userId,
         });
 
         await newRec.save();
@@ -28,7 +29,7 @@ const createRecommendation = async (req, res) => {
 //get recommendations
 const getRecommendations = async (req, res) => {
     try {
-        const recs = await Recommendation.find().sort({createdAt: -1}) //newest first
+        const recs = await Recommendation.find().populate('userId', 'username').sort({createdAt: -1}) //newest first
         res.json(recs);
     } catch (err) {
         res.status(500).json({error: err.message});

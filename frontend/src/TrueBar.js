@@ -1,4 +1,4 @@
-import { Flex, Container, Text, Button } from '@chakra-ui/react'
+import { Flex, Container, Text, Button, HStack } from '@chakra-ui/react'
 import React from 'react'
 import { Link } from "react-router-dom"
 
@@ -26,9 +26,14 @@ const TrueBar = () => {
             >Put Me On
         </Text>
 
-        <Button as={Link} to="/createuser">
+        <HStack>
+          <Button as={Link} to="/createuser">
             New User
-        </Button>
+          </Button>
+          <Button as={Link} to="/login" colorScheme="purple">
+            Login
+          </Button>
+        </HStack>
         
 
         </Flex>   

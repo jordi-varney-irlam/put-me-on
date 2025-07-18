@@ -10,16 +10,24 @@ const CreateRecommendation = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newRec = { category, title, description, userId };
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      alert('You must be logged in to submit a recommendation.');
+      return;
+    }
+
+    const newRec = { category, title, description };
 
     try {
       const res = await fetch('http://localhost:5001/api/recs', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, },
         body: JSON.stringify(newRec),
       });
 
       const data = await res.json();
+      
       if (res.ok) {
         alert('Recommendation submitted!');
         setCategory('');
@@ -61,11 +69,6 @@ const CreateRecommendation = () => {
             placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-          />
-          <Input
-            placeholder="User ID"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
           />
           <Button colorScheme="purple" type="submit" width="100%">
             Submit

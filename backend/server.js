@@ -31,9 +31,9 @@ const recRoutes = require('./routes/recommendations');
 app.use('/api/recs', recRoutes);
 
 //hello test
-app.get('/', (req, res) => {
+{/*app.get('/', (req, res) => {
   res.send('Hello from backend!');
-});
+});*/}
 
 const PORT = process.env.PORT || 5001;
 
