@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import CreateRecommendation from '../CreateRecommendation';
+import CreateRecommendation from '../components/CreateRecommendation';
 import RecommendationItem from '../components/RecommendationItem';
 
 const HomePage = () => {
