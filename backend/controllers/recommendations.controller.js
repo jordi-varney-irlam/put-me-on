@@ -36,4 +36,27 @@ const getRecommendations = async (req, res) => {
     }
 };
 
-module.exports = { createRecommendation, getRecommendations };
+//delete recommendations
+const deleteRecommendations = async (req, res) => {
+    try {
+        const rec = await Recommendation.findById(req.params.id);
+
+        if (!rec) {
+            return res.status(404).json({ message: 'Recommendation not found' });
+        }
+
+        //only creator can delete
+        if (rec.userId.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: 'Unauthorized' });
+        }
+
+        await rec.deleteOne();
+        res.json({ message: 'Recommendation deleted' });
+     } catch (err) {
+            console.error('Error deleting recommendation:', err);
+            res.status(500).json({ error: err.message });
+     }
+};
+
+
+module.exports = { createRecommendation, getRecommendations, deleteRecommendations };

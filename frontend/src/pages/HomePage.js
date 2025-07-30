@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CreateRecommendation from '../CreateRecommendation';
+import RecommendationItem from '../components/RecommendationItem';
 
 const HomePage = () => {
   const [recs, setRecs] = useState([]);
@@ -25,23 +26,7 @@ const HomePage = () => {
         <p>No recommendations yet.</p>
       ) : (
         recs.map((rec) => (
-          <div
-            key={rec._id}
-            style={{
-              border: '1px solid #ccc',
-              padding: '1rem',
-              margin: '1rem 0',
-            }}
-          >
-            <h2>
-              {rec.title}
-              <span style={{ fontSize: '0.8rem', color: '#888' }}>
-                ({rec.category})
-              </span>
-            </h2>
-            <p>{rec.description}</p>
-            <p>Posted by: {rec.userId?.username || 'Unknown' }</p>
-          </div>
+          <RecommendationItem key={rec._id} rec={rec} onDelete={fetchRecs} />
         ))
       )}
     </div>

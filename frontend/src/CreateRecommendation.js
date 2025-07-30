@@ -58,7 +58,7 @@ const CreateRecommendation = () => {
             <option value="Location">Location</option>
             <option value="Activity">Activity</option>
             <option value="Music">Music</option>
-            <option value="App">App</option>
+            <option value="Show">Show</option>
           </Select>
           <Input
             placeholder="Title"
