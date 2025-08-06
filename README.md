@@ -26,7 +26,7 @@
 
 ---
 
-## 🚀 Getting Started (Local Setup)
+## 🚀 Using Put Me On
 
 > ⚠️ Note: This project is still local-only and not deployed. Instructions below assume a basic dev setup with Node.js and MongoDB installed.
 
