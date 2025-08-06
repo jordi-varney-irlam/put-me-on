@@ -26,18 +26,6 @@
 
 ---
 
-Put-Me-On/
-├── frontend/              # React frontend
-│   ├── public/            # Static assets
-│   └── src/               # React components & app logic
-├── backend/               # Express backend
-│   ├── controllers/       # Route handlers
-│   ├── middleware/        # Custom middleware (e.g. auth)
-│   ├── models/            # Mongoose schemas
-│   └── routes/            # API route definitions
-├── .git/                  # Git tracking files
-
-
 ## 🚀 Getting Started (Local Setup)
 
 > ⚠️ Note: This project is still local-only and not deployed. Instructions below assume a basic dev setup with Node.js and MongoDB installed.
