@@ -1,4 +1,4 @@
-# Put Me On 🎬📚🎮
+# Put Me On
 
 **Put Me On** is a full-stack MERN web application that lets users share and discover recommendations for movies, books, shows, activities, and more. Users can register and log in using secure JWT authentication, post their own suggestions, and browse the public board to see what others are enjoying.
 
