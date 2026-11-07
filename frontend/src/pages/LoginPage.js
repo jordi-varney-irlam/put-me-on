@@ -1,63 +1,43 @@
-import React, { useState } from 'react';
-import { Box, Input, Button, VStack, Heading } from '@chakra-ui/react';
+import React from 'react';
+import { Link as ChakraLink, useToast } from '@chakra-ui/react';
+import { Link, useNavigate } from 'react-router-dom';
+import AuthForm from '../components/AuthForm';
+import { apiFetch } from '../api';
+import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const toast = useToast();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+  const handleLogin = async ({ username, password }) => {
+    try {
+      const data = await apiFetch('/api/auth/login', { method: 'POST', body: { username, password } });
+      login(data.token, data.user);
+      toast({ title: `Welcome back, ${data.user.username}!`, status: 'success', duration: 2500 });
+      navigate('/');
+    } catch (err) {
+      toast({ title: 'Login failed', description: err.message, status: 'error' });
+    }
+  };
 
-        try {
-            const res = await fetch('http://localhost:5001/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password }),
-            });
+  return (
+    <AuthForm
+      emoji="👋"
+      title="Welcome back"
+      subtitle="Log in to share your recommendations"
+      submitLabel="Log in"
+      onSubmit={handleLogin}
+      footer={
+        <>
+          New here?{' '}
+          <ChakraLink as={Link} to="/createuser" color="purple.600" fontWeight={600}>
+            Create an account
+          </ChakraLink>
+        </>
+      }
+    />
+  );
+};
 
-            const data = await res.json();
-
-            if (res.ok) {
-                alert('Login successful!');
-                console.log('Token:', data.token);
-
-                localStorage.setItem('token', data.token);
-
-                setUsername('');
-                setPassword('');
-            } else {
-                alert(data.message || 'Login failed');
-            }
-        } catch (err) {
-            alert('An error occurred: ' + err.message);
-        }
-    };
-    
-    return (
-        <Box maxW="md" mx="auto" mt={8} p={4} borderWidth={1} borderRadius="lg">
-          <Heading size="md" mb={4}>Login</Heading>
-          <form onSubmit={handleSubmit}>
-            <VStack spacing={4}>
-              <Input
-                placeholder="Username"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-                required
-              />
-              <Input
-                placeholder="Password"
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-              />
-              <Button colorScheme="teal" type="submit" width="100%">
-                Log In
-              </Button>
-            </VStack>
-          </form>
-        </Box>
-      );
-    };
-    
-    export default LoginPage;
+export default LoginPage;

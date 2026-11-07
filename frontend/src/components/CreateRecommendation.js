@@ -1,83 +1,141 @@
 import React, { useState } from 'react';
-import { Box, Input, Textarea, Select, Button, VStack, Heading } from '@chakra-ui/react';
+import {
+  Button,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  SimpleGrid,
+  Text,
+  Textarea,
+  VStack,
+  useToast,
+} from '@chakra-ui/react';
+import { apiFetch } from '../api';
+import { CATEGORIES } from '../categories';
 
-const CreateRecommendation = () => {
+const MAX_DESCRIPTION = 500;
+
+/** Modal form for posting a new recommendation. */
+const CreateRecommendation = ({ isOpen, onClose, onCreated, onAuthExpired }) => {
   const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [userId, setUserId] = useState(''); //this will be passed in or hardcoded for now
+  const [submitting, setSubmitting] = useState(false);
+  const toast = useToast();
+
+  const reset = () => {
+    setCategory('');
+    setTitle('');
+    setDescription('');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      alert('You must be logged in to submit a recommendation.');
+    if (!category) {
+      toast({ title: 'Pick a category first', status: 'warning', duration: 2000 });
       return;
     }
 
-    const newRec = { category, title, description };
-
+    setSubmitting(true);
     try {
-      const res = await fetch('http://localhost:5001/api/recs', {
+      await apiFetch('/api/recs', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, },
-        body: JSON.stringify(newRec),
+        auth: true,
+        body: { category, title: title.trim(), description: description.trim() },
       });
-
-      const data = await res.json();
-      
-      if (res.ok) {
-        alert('Recommendation submitted!');
-        setCategory('');
-        setTitle('');
-        setDescription('');
-        // possibly refresh or update rec list
-      } else {
-        alert(data.message || 'Error submitting recommendation');
-      }
+      toast({ title: 'Recommendation posted! 🎉', status: 'success', duration: 2500 });
+      reset();
+      onClose();
+      onCreated();
     } catch (err) {
-      console.error('Error:', err);
-      alert('Something went wrong.');
+      if (err.status === 401) {
+        onAuthExpired?.();
+        onClose();
+      }
+      toast({ title: "Couldn't post recommendation", description: err.message, status: 'error' });
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
-    <Box maxW="md" mx="auto" mt={8} p={4} borderWidth={1} borderRadius="lg">
-      <Heading size="md" mb={4}>Create a Recommendation</Heading>
-      <form onSubmit={handleSubmit}>
-        <VStack spacing={4}>
-          <Select
-            placeholder="Select category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value="Movie">Movie</option>
-            <option value="Book">Book</option>
-            <option value="Location">Location</option>
-            <option value="Activity">Activity</option>
-            <option value="Music">Music</option>
-            <option value="Show">Show</option>
-          </Select>
-          <Input
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <Textarea
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <Button colorScheme="purple" type="submit" width="100%">
-            Submit
+    <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered motionPreset="slideInBottom">
+      <ModalOverlay bg="blackAlpha.400" backdropFilter="blur(6px)" />
+      <ModalContent as="form" onSubmit={handleSubmit} borderRadius="card" mx={4}>
+        <ModalHeader>Put people on to something ✨</ModalHeader>
+        <ModalCloseButton borderRadius="full" />
+        <ModalBody>
+          <VStack spacing={5}>
+            <FormControl isRequired>
+              <FormLabel>Category</FormLabel>
+              <SimpleGrid columns={{ base: 3, sm: 4 }} spacing={2}>
+                {CATEGORIES.map((c) => {
+                  const selected = category === c.value;
+                  return (
+                    <Button
+                      key={c.value}
+                      type="button"
+                      size="sm"
+                      variant={selected ? 'solid' : 'outline'}
+                      colorScheme={selected ? 'purple' : 'gray'}
+                      onClick={() => setCategory(c.value)}
+                      aria-pressed={selected}
+                    >
+                      {c.emoji} {c.value}
+                    </Button>
+                  );
+                })}
+              </SimpleGrid>
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel>Title</FormLabel>
+              <Input
+                placeholder="e.g. Spirited Away"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                maxLength={120}
+                borderRadius="xl"
+              />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel>Why should people check it out?</FormLabel>
+              <Textarea
+                placeholder="Tell us what makes it great…"
+                value={description}
+                onChange={(e) => setDescription(e.target.value.slice(0, MAX_DESCRIPTION))}
+                rows={5}
+                borderRadius="xl"
+                resize="vertical"
+              />
+              <FormHelperText textAlign="right">
+                <Text as="span" color={description.length >= MAX_DESCRIPTION ? 'red.500' : undefined}>
+                  {description.length}/{MAX_DESCRIPTION}
+                </Text>
+              </FormHelperText>
+            </FormControl>
+          </VStack>
+        </ModalBody>
+        <ModalFooter gap={3}>
+          <Button variant="ghost" onClick={onClose}>
+            Cancel
           </Button>
-        </VStack>
-      </form>
-    </Box>
+          <Button type="submit" isLoading={submitting} loadingText="Posting">
+            Post it
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };
 
 export default CreateRecommendation;
-

@@ -1,44 +1,91 @@
-import { Flex, Container, Text, Button, HStack } from '@chakra-ui/react'
-import React from 'react'
-import { Link } from "react-router-dom"
+import React from 'react';
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Flex,
+  HStack,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+  useToast,
+} from '@chakra-ui/react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
 
 const TrueBar = () => {
-  return ( 
-      <Container maxW={"1140px"} px={4}>
-       <Flex
-        h="64px" // or h={16}
-        alignItems="center"
-        justifyContent="space-between" // put space between contents
-        bg="gray.500"
-        overflow="hidden"
-        borderRadius="xl"
-        px={4} // adds padding to left and right
-      >
-        <Text
-            as={Link}
-            to="/"
-            fontSize={{ base: "22px", sm: "28px" }}
-            fontWeight={"bold"}
-            textTransform={"uppercase"}
-            textAlign={"center"}
-            bgGradient={"linear(to-r, purple.300, yellow.400)"}
-            bgClip={"text"}
-            >Put Me On
-        </Text>
+  const { isLoggedIn, user, logout } = useAuth();
+  const navigate = useNavigate();
+  const toast = useToast();
 
-        <HStack>
-          <Button as={Link} to="/createuser">
-            New User
-          </Button>
-          <Button as={Link} to="/login" colorScheme="purple">
-            Login
-          </Button>
-        </HStack>
-        
+  const handleLogout = () => {
+    logout();
+    toast({ title: 'Logged out', description: 'See you soon 👋', status: 'info', duration: 2500 });
+    navigate('/');
+  };
 
-        </Flex>   
-    </Container>
-  )
-}
+  return (
+    <Box position="sticky" top={4} zIndex={10} mb={8}>
+      <Container maxW="1140px" px={4}>
+        <Flex
+          h="68px"
+          alignItems="center"
+          justifyContent="space-between"
+          px={{ base: 4, md: 6 }}
+          borderRadius="full"
+          bg="rgba(255, 255, 255, 0.72)"
+          backdropFilter="saturate(180%) blur(14px)"
+          border="1px solid"
+          borderColor="whiteAlpha.800"
+          boxShadow="soft"
+        >
+          <HStack as={Link} to="/" spacing={2} _hover={{ textDecoration: 'none' }}>
+            <Text fontSize={{ base: '22px', sm: '26px' }} lineHeight={1}>
+              📣
+            </Text>
+            <Text
+              fontSize={{ base: '20px', sm: '26px' }}
+              fontWeight={800}
+              letterSpacing="-0.02em"
+              textTransform="uppercase"
+              bgGradient="linear(to-r, purple.600, purple.400, butter.600)"
+              bgClip="text"
+            >
+              Put Me On
+            </Text>
+          </HStack>
+
+          {isLoggedIn ? (
+            <Menu placement="bottom-end">
+              <MenuButton
+                as={Button}
+                variant="ghost"
+                px={2}
+                leftIcon={<Avatar size="sm" name={user?.username} bg="purple.500" color="white" />}
+              >
+                <Text display={{ base: 'none', sm: 'inline' }}>{user?.username || 'Account'}</Text>
+              </MenuButton>
+              <MenuList borderRadius="xl" boxShadow="lift">
+                <MenuItem onClick={handleLogout}>Log out</MenuItem>
+              </MenuList>
+            </Menu>
+          ) : (
+            <HStack spacing={2}>
+              <Button as={Link} to="/createuser" variant="ghost" size={{ base: 'sm', sm: 'md' }}>
+                Sign up
+              </Button>
+              <Button as={Link} to="/login" size={{ base: 'sm', sm: 'md' }} boxShadow="soft">
+                Log in
+              </Button>
+            </HStack>
+          )}
+        </Flex>
+      </Container>
+    </Box>
+  );
+};
 
 export default TrueBar;

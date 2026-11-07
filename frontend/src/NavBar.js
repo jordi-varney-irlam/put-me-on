@@ -1,46 +1,39 @@
-import { Flex, Container, Text, Link } from '@chakra-ui/react'
-import React from 'react'
+import { Box, Container, Flex, Text } from '@chakra-ui/react';
+import React from 'react';
 import TextPressure from './components/TextPressure';
 
+// Footer banner with the interactive "pressure" text.
 const NavBar = () => {
-  return ( 
-      <Container maxW={"1140px"} px={4}>
-       <Flex
-        h="64px" // or h={16}
+  return (
+    <Container as="footer" maxW="1140px" px={4} mt={16} pb={8}>
+      <Flex
+        h="72px"
         alignItems="center"
-        justifyContent="center" // center the animated text
-        bg="gray.500"
+        justifyContent="center"
+        bgGradient="linear(to-r, purple.700, purple.500, purple.700)"
         overflow="hidden"
-        borderRadius="xl"
+        borderRadius="full"
+        boxShadow="lift"
       >
-        <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+        <Box h="100%" w="100%" display="flex" alignItems="center" px={6}>
           <TextPressure
             text="Put Me On. Put Me On. Put Me On. Put Me On."
-            flex={true}         // disables spacing between letters
+            flex={true}
             alpha={false}
             stroke={false}
             width={true}
             weight={true}
             italic={true}
-            textColor="#ffffff"
-            strokeColor="#ff0000"
-            minFontSize={60}     // small enough to fit navbar
+            textColor="#FFF3C2"
+            minFontSize={60}
           />
-        </div>
-
-            {/*<Text
-            fontSize={{ base: "22px", sm: "28px" }}
-            fontWeight={"bold"}
-            textTransform={"uppercase"}
-            textAlign={"center"}
-            bgGradient={"linear(to-r, purple.300, yellow.400)"}
-            bgClip={"text"}
-            ><Link href="/">Put Me On </Link>
-    </Text>*/}
-
-        </Flex>   
+        </Box>
+      </Flex>
+      <Text textAlign="center" mt={4} fontSize="sm" color="purple.700" opacity={0.7}>
+        Share what you love. Discover what's next.
+      </Text>
     </Container>
-  )
-}
+  );
+};
 
-export default NavBar
+export default NavBar;

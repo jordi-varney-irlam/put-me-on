@@ -9,7 +9,8 @@ const jwt = require('jsonwebtoken'); //used to create/verify tokens
 //POST /register
 router.post('/register', async (req, res) => {
     try {
-        const {username, password } = req.body;
+        const username = req.body.username?.trim();
+        const { password } = req.body;
 
         if (!username || !password) {
             return res.status(400).json({ message: "Username and password are required."});
@@ -35,10 +36,11 @@ router.post('/register', async (req, res) => {
 //POST /login
 router.post('/login', async (req, res) => {
     try {
-        const {username, password} = req.body;
-        
-        //FOR DEBUG
-        console.log('Login payload:', req.body);
+        const username = req.body.username?.trim();
+        const { password } = req.body;
+        if (!username || !password) {
+            return res.status(400).json({ message: "Username and password are required." });
+        }
 
         //find user
         const user = await User.findOne({username});
