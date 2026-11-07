@@ -43,9 +43,6 @@ const TrueBar = () => {
           boxShadow="soft"
         >
           <HStack as={Link} to="/" spacing={2} _hover={{ textDecoration: 'none' }}>
-            <Text fontSize={{ base: '22px', sm: '26px' }} lineHeight={1}>
-              📣
-            </Text>
             <Text
               fontSize={{ base: '20px', sm: '26px' }}
               fontWeight={800}
