@@ -18,6 +18,7 @@ import {
   Tooltip,
   useDisclosure,
   useToast,
+  Icon
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { apiFetch } from '../api';
@@ -94,9 +95,12 @@ const RecommendationItem = ({ rec, isOwner, onDeleted, index = 0 }) => {
               py={1}
               fontSize="xs"
               textTransform="none"
+              display="inline-flex"
+              alignItems="center"
             >
-              {cat.emoji} {cat.value}
+              <Icon as={cat.icon} mr={1} /> {cat.value}
             </Badge>
+
             {isOwner && (
               <Tooltip label="Delete" hasArrow>
                 <IconButton

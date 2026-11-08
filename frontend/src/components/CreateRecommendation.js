@@ -17,6 +17,7 @@ import {
   Textarea,
   VStack,
   useToast,
+  Icon
 } from '@chakra-ui/react';
 import { apiFetch } from '../api';
 import { CATEGORIES } from '../categories';
@@ -70,7 +71,7 @@ const CreateRecommendation = ({ isOpen, onClose, onCreated, onAuthExpired }) => 
     <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered motionPreset="slideInBottom">
       <ModalOverlay bg="blackAlpha.400" backdropFilter="blur(6px)" />
       <ModalContent as="form" onSubmit={handleSubmit} borderRadius="card" mx={4}>
-        <ModalHeader>Put people on to something ✨</ModalHeader>
+        <ModalHeader>Put people on to something</ModalHeader>
         <ModalCloseButton borderRadius="full" />
         <ModalBody>
           <VStack spacing={5}>
@@ -88,8 +89,9 @@ const CreateRecommendation = ({ isOpen, onClose, onCreated, onAuthExpired }) => 
                       colorScheme={selected ? 'purple' : 'gray'}
                       onClick={() => setCategory(c.value)}
                       aria-pressed={selected}
+                      leftIcon={<Icon as={c.icon} />}
                     >
-                      {c.emoji} {c.value}
+                      {c.value}
                     </Button>
                   );
                 })}

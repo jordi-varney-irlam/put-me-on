@@ -18,6 +18,7 @@ import {
   WrapItem,
   useDisclosure,
   useToast,
+  Icon
 } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -26,6 +27,7 @@ import RecommendationItem from '../components/RecommendationItem';
 import { apiFetch } from '../api';
 import { CATEGORIES } from '../categories';
 import { useAuth } from '../context/AuthContext';
+import { GiDiamonds } from "react-icons/gi";
 
 const MotionBox = motion(Box);
 
@@ -100,7 +102,7 @@ const HomePage = () => {
     createModal.onOpen();
   };
 
-  const filterChips = [{ value: 'All', emoji: '🌈' }, ...CATEGORIES];
+  const filterChips = [{ value: 'All', icon: GiDiamonds}, ...CATEGORIES];
 
   return (
     <Container maxW="1140px" px={4}>
@@ -184,8 +186,9 @@ const HomePage = () => {
                   bg={active ? undefined : 'whiteAlpha.800'}
                   boxShadow={active ? 'soft' : 'none'}
                   aria-pressed={active}
+                  leftIcon={<Icon as={c.icon} />}
                 >
-                  {c.emoji} {c.value}
+                  {c.value}
                   <Text as="span" ml={1.5} opacity={0.6} fontWeight={500}>
                     {counts[c.value] || 0}
                   </Text>
